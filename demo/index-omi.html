@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./node_modules/omi/dist/omi.dev.js"></script>
+</head>
+<body>
+  <script>
+      function clickHandler() {
+        console.log('clickHandler');
+      };  
+  </script>
+  <div id="app">
+      <div style="height: 100px; width: 200px" class="c-button">
+          <button onclick="clickHandler">hello, world</button>
+      </div>
+  </div>
+  <div id="btn"></div>
+  <script>
+    var html = Omi.html;
+    var htm = Omi.htm;
+    var define = Omi.define;
+    var render = Omi.render;
+    // function h(nodeName, attributes) {
+    //   var children = Array.prototype.slice.call(arguments, 2);
+    //   return ({
+    //     nodeName,
+    //     attributes,
+    //     children
+    //   });
+    // }
+
+    // var todolist = [1, 2, 3];
+
+    // var vdom = htm.bind(h)`
+    // <div>
+    //     <button onClick=${clickHandler} label="111" list=${todolist}>hello, world</button>
+    //     <div><span>hi</span></div>
+    //     hellx
+    // </div>
+    // `
+    // console.dir(vdom);
+
+    // var vnode = html`
+    // <div>
+    //     <button onClick=${clickHandler} label="111" list=${todolist}>hello, world</button>
+    //     <div><span>hi</span></div>
+    //     hellx
+    // </div>
+    // `;
+
+    // console.dir(vnode);
+
+
+    var ostyle = {
+      height: '100px',
+      width: '200px',
+      backgroundColor: '#ff00ff',
+    };
+    var vnode = html`
+    <div style=${ostyle} class="c-button">
+        <button onClick=${clickHandler}>hello, world</button>
+    </div>
+    `;
+
+    console.dir(vnode);
+
+    console.log(JSON.stringify(vnode, function(key, value) {
+      // 根节点
+      if (!key) return value;
+      if (/^on/.test(key) && typeof value === 'function') {
+        return value.name;
+      }
+      return value;
+    }, 4));
+
+    render(vnode, document.getElementById('btn'), false);
+  </script>
+</body>
+</html>

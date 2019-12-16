@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function filterNames(names, filterNames) {
+      var s = new Set(filterNames);
+      return names.filter(item => !s.has(item));
+    }
+
+    function filterNodes(names) {
+      var nodeNames = ["Node"];
+      names = names.filter(item => {
+        try {
+          if (window[item].prototype instanceof Node) {
+            nodeNames.push(item);
+            return false
+          }
+        } catch (error) { }
+        return true
+      });
+
+      console.log("Node:", nodeNames);
+
+      return names.filter(item => item != "Node");
+    }
+
+    var names = Object.getOwnPropertyNames(window);
+    console.log(names);
+    // 过滤js内置对象
+    var jsNames = ["BigInt", "BigInt64Array", "BigUint64Array", "Infinity", "NaN", "undefined", "eval", "isFinite", "isNaN", "parseFloat", "parseInt", "decodeURI", "decodeURIComponent", "encodeURI", "encodeURIComponent", "Array", "Date", "RegExp", "Promise", "Proxy", "Map", "WeakMap", "Set", "WeakSet", "Function", "Boolean", "String", "Number", "Symbol", "Object", "Error", "EvalError", "RangeError", "ReferenceError", "SyntaxError", "TypeError", "URIError", "ArrayBuffer", "SharedArrayBuffer", "DataView", "Float32Array", "Float64Array", "Int8Array", "Int16Array", "Int32Array", "Uint8Array", "Uint16Array", "Uint32Array", "Uint8ClampedArray", "Atomics", "JSON", "Math", "Reflect", "escape", "unescape"];
+    names = filterNames(names, jsNames);
+    console.log(names);
+
+    // 过滤元素构造器
+    names = filterNodes(names);
+    console.log(names);
+
+    // 过滤window接口
+    // https://html.spec.whatwg.org/#window
+    var windowNames = ["window","self","document","name","location","history","customElements","locationbar","menubar","personalbar","scrollbars","statusbar","toolbar","status","close","closed","stop","focus","blur","frames","length","top","opener","parent","frameElement","open","object","navigator","applicationCache","alert","confirm","prompt","print","postMessage"];
+    names = filterNames(names, windowNames);
+    console.log(names);
+
+    // 过滤事件
+    names = names.filter(item => !/^on/.test(item));
+    console.log(names);
+
+    // 过滤webkit
+    names = names.filter(item => !/^webkit/.test(item));
+    console.log(names);
+
+    // html规范里的其他接口
+    var htmlONames = ["ApplicationCache", "AudioTrack", "AudioTrackList", "BarProp", "BeforeUnloadEvent", "BroadcastChannel", "CanvasGradient", "CanvasPattern", "CanvasRenderingContext2D", "CloseEvent", "CustomElementRegistry", "DOMStringList", "DOMStringMap", "DataTransfer", "DataTransferItem", "DataTransferItemList", "DedicatedWorkerGlobalScope", "Document", "DragEvent", "ErrorEvent", "EventSource", "External", "FormDataEvent", "HTMLAllCollection", "HashChangeEvent", "History", "ImageBitmap", "ImageBitmapRenderingContext", "ImageData", "Location", "MediaError", "MessageChannel", "MessageEvent", "MessagePort", "MimeType", "MimeTypeArray", "Navigator", "OffscreenCanvas", "OffscreenCanvasRenderingContext2D", "PageTransitionEvent", "Path2D", "Plugin", "PluginArray", "PopStateEvent", "PromiseRejectionEvent", "RadioNodeList", "SharedWorker", "SharedWorkerGlobalScope", "Storage", "StorageEvent", "TextMetrics", "TextTrack", "TextTrackCue", "TextTrackCueList", "TextTrackList", "TimeRanges", "TrackEvent", "ValidityState", "VideoTrack", "VideoTrackList", "WebSocket", "Window", "Worker", "WorkerGlobalScope", "WorkerLocation", "WorkerNavigator"];
+    names = filterNames(names, htmlONames);
+    console.log(names);
+
+    // Intl 国际化相关的内容
+    // http://www.ecma-international.org/ecma-402/5.0/index.html#Title
+    names = names.filter(item => item != "Intl")
+    console.log(names);
+
+    // Streams 标准
+    // https://streams.spec.whatwg.org/#blqs-class
+    var streamsNamse = ["ReadableStream", "ReadableStreamDefaultReader", "ReadableStreamBYOBReader", "ReadableStreamDefaultController", "ReadableByteStreamController", "ReadableStreamBYOBRequest", "WritableStream", "WritableStreamDefaultWriter", "WritableStreamDefaultController", "TransformStream", "TransformStreamDefaultController", "ByteLengthQueuingStrategy", "CountQueuingStrategy"];
+    names = filterNames(names, streamsNamse);
+    console.log(names);
+
+    // WebGL
+    // https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15
+    var webglNames = ["WebGLContextEvent","WebGLObject", "WebGLBuffer", "WebGLFramebuffer", "WebGLProgram", "WebGLRenderbuffer", "WebGLShader", "WebGLTexture", "WebGLUniformLocation", "WebGLActiveInfo", "WebGLShaderPrecisionFormat", "WebGLRenderingContext"];
+    names = filterNames(names, webglNames);
+    console.log(names);
+
+    // Web Audio API
+    // https://www.w3.org/TR/webaudio/
+    var audioNames = ["AudioContext", "AudioNode", "AnalyserNode", "AudioBuffer", "AudioBufferSourceNode", "AudioDestinationNode", "AudioParam", "AudioListener", "AudioWorklet", "AudioWorkletGlobalScope", "AudioWorkletNode", "AudioWorkletProcessor", "BiquadFilterNode", "ChannelMergerNode", "ChannelSplitterNode", "ConstantSourceNode", "ConvolverNode", "DelayNode", "DynamicsCompressorNode", "GainNode", "IIRFilterNode", "MediaElementAudioSourceNode", "MediaStreamAudioSourceNode", "MediaStreamTrackAudioSourceNode", "MediaStreamAudioDestinationNode", "PannerNode", "PeriodicWave", "OscillatorNode", "StereoPannerNode", "WaveShaperNode", "ScriptProcessorNode", "AudioProcessingEvent"];
+    names = filterNames(names, audioNames);
+    console.log(names);
+
+    // Encoding 标准
+    // https://encoding.spec.whatwg.org/#dom-textencoder
+    var encodingNames = ["TextDecoder", "TextEncoder", "TextDecoderStream", "TextEncoderStream"];
+    names = filterNames(names, encodingNames);
+    console.log(names);
+
+    // Web Background Synchronization
+    // https://wicg.github.io/BackgroundSync/spec/#sync-manager-interface
+    var syncManagernames = ["register", "getTags"];
+    names = filterNames(names, syncManagernames);
+    console.log(names);
+
+    // Web Cryptography API
+    // https://www.w3.org/TR/WebCryptoAPI/
+    var cryptographyNames = ["crypto", "Crypto", "CryptoKey", "SubtleCrypto"];
+    names = filterNames(names, cryptographyNames);
+    console.log(names);
+
+    // Media Source Extensions
+    // https://www.w3.org/TR/media-source/
+    var mediaSourceExtNames = ["MediaSource", "SourceBuffer", "SourceBufferList"];
+    names = filterNames(names, mediaSourceExtNames);
+    console.log(names);
+
+    // The Screen Orientation API
+    // https://www.w3.org/TR/screen-orientation/
+    var screenPrientationNames = [];
+    names = filterNames(names, screenPrientationNames);
+    console.log(names);
+
+  </script>
+</body>
+</html>
